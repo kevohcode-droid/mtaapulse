@@ -43,3 +43,25 @@ npm run build
 ## Integration requirements
 
 Before connecting a service, define the report/list/detail/status API response shapes, authentication and role model, department assignment/comment permissions, upload limits/storage behavior, and location/geocoding provider. Then replace the isolated demo data adapter in `frontend/src/data.ts` with the agreed API client and add server-side validation and authorization. Do not treat the browser’s local storage or editable UI as a trusted source of civic reports or permissions.
+
+## Backend foundation
+
+The approved backend foundation is a .NET 10 Clean Architecture solution in `backend/`:
+
+- `MtaaPulse.Domain` contains domain rules and has no project dependencies.
+- `MtaaPulse.Application` references only `MtaaPulse.Domain`.
+- `MtaaPulse.Infrastructure` implements application/domain abstractions.
+- `MtaaPulse.WebAPI` is the HTTP composition root and references Application and Infrastructure.
+- `MtaaPulse.Tests` contains unit and architecture tests.
+
+The API currently exposes only `GET /api/v1/health`, a liveness response that does not check database or external-service readiness. Authentication, PostgreSQL, migrations, reports, authorization, Docker, and frontend API integration are not implemented yet.
+
+Build and test the solution:
+
+```sh
+dotnet build backend/MtaaPulse.sln
+dotnet test backend/MtaaPulse.sln
+dotnet run --project backend/MtaaPulse.WebAPI
+```
+
+In Development, the API template also exposes its OpenAPI document. Database/provider and service configuration will be introduced with their corresponding implementation phases; do not add production credentials to `appsettings*.json`.

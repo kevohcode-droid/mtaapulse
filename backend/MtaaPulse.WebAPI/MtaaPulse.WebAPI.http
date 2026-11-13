@@ -1,0 +1,6 @@
+@MtaaPulse.WebAPI_HostAddress = http://localhost:5235
+
+GET {{MtaaPulse.WebAPI_HostAddress}}/api/v1/health
+Accept: application/json
+
+###
